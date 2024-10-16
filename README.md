@@ -1,3 +1,9 @@
+# Haku
+
+My (maybe) future phone OS configuration. Forked from [this great repo](https://github.com/plmercereau/nixos-pi-zero-2).
+
+---
+
 # Building a NixOS SD image for a Raspberry Pi Zero 2 w
 
 ## 1. Update `zero2w.nix`

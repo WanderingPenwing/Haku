@@ -42,49 +42,51 @@
           name = "dpi24";
           dtsText = ''
 /dts-v1/;
-/plugin/;
 
-/{
-	compatible = "brcm,bcm2835";
-
-	// There is no DPI driver module, but we need a platform device
-	// node (that doesnt already use pinctrl) to hang the pinctrl
-	// reference on - leds will do
+/ {
+	compatible = "brcm,bcm2708";
 
 	fragment@0 {
-		target = <&fb>;
+		target = <0xffffffff>;
+
 		__overlay__ {
 			pinctrl-names = "default";
-			pinctrl-0 = <&dpi24_pins>;
+			pinctrl-0 = <0x01>;
 		};
 	};
 
 	fragment@1 {
-		target = <&vc4>;
-		__overlay__ {
-			pinctrl-names = "default";
-			pinctrl-0 = <&dpi24_pins>;
-		};
-	};
+		target = <0xffffffff>;
 
-	fragment@2 {
-		target = <&gpio>;
 		__overlay__ {
-			dpi24_pins: dpi24_pins {
-				brcm,pins = <0 1 2 3 4 5 6 7 8 9 10 11
-					     12 13 14 15 16 17 18 19 20
-					     21 22 23 24 25 26 27>;
-				brcm,function = <6>; /* alt2 */
-				brcm,pull = <0>; /* no pull */
+
+			dpi24_pins {
+				brcm,pins = <0x00 0x01 0x02 0x03 0x04 0x05 0x06 0x07 0x08 0x09 0x0a 0x0b 0x0c 0x0d 0x0e 0x0f 0x10 0x11 0x14 0x15 0x16 0x17 0x18 0x19 0x1a 0x1b>;
+				brcm,function = <0x06>;
+				brcm,pull = <0x00>;
+				linux,phandle = <0x01>;
+				phandle = <0x01>;
 			};
 		};
 	};
 
-	fragment@3 {
-	    target = <&dpi>;
-	    __overlay__ {
-	        status = "okay";
-	    };
+	__symbols__ {
+		dpi24_pins = "/fragment@1/__overlay__/dpi24_pins";
+	};
+
+	__fixups__ {
+		leds = "/fragment@0:target:0";
+		gpio = "/fragment@1:target:0";
+	};
+
+	__local_fixups__ {
+
+		fragment@0 {
+
+			__overlay__ {
+				pinctrl-0 = <0x00>;
+			};
+		};
 	};
 };
           '';
